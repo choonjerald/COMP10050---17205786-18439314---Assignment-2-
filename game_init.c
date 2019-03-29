@@ -40,9 +40,25 @@ void initialize_board(square board[NUM_ROWS][NUM_COLUMNS]){
  * Output: The number of players of the game
  */
 int initialize_players(player players[]){
-  for(int i = 0; i < 6; i++){
-    
-  }
+    int j;
+    enum color choice;
+    choice = RED;
+    printf("Player 1: RED;\nPlayer 2: BLU;\nPlayer 3: GREEN;\nPlayer 4: YELLOW;\nPlayer 5: PINK;\nPlayer 6: ORANGE;\n");
+    printf("Enter how many players are playing: ");
+    scanf("%d", &j);
 
-        return 0;
+    int i = 0;
+    while(i<j){
+        printf("Enter Name for Player %d: ", i+1);
+        scanf("%s",players[i].name);
+
+        printf("%s", players[i].name);
+
+
+        players[i].col = choice+i;
+        printf("color %d\n", players[i].col);
+        ++i;
+    }
+
+        return i;
     }

@@ -54,7 +54,6 @@ typedef struct player{
     enum color col;
     char name[30];
     int numTokensLastCol;
-
 }player;
 
 
