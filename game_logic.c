@@ -12,7 +12,7 @@ void printLine();
 
 /*
  * Returns the first letter associated with the color of the token
- * 
+ *
  * Input: t - pointer to a token
  * Output: initial of the color of the token
  */
@@ -28,13 +28,13 @@ char print_token(token *t){
 
 /*
  * Prints the board
- * 
- * Input: the board to be printed. 
+ *
+ * Input: the board to be printed.
  */
 void print_board(square board[NUM_ROWS][NUM_COLUMNS]){
     printf("                THE BOARD\n");
     for(int i =0; i < NUM_ROWS; i++){
-       
+
         //prints an horizontal line
         printLine();
         //prints the row number
@@ -64,33 +64,96 @@ void print_board(square board[NUM_ROWS][NUM_COLUMNS]){
 }
 
 void printLine(){
-  printf("   -------------------------------------\n");  
+  printf("   -------------------------------------\n");
 }
 
 /*
  * Place tokens in the first column of the board
- * 
+ *
  * Input: board - a 6x9 array of squares that represents the board
  *        players - the array of the players
- *        numPlayers - the number of players  
+ *        numPlayers - the number of players
  */
 void place_tokens(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPlayers){
-    // TO BE IMPLEMENTED
+  int minNumOfTokens = 0;
+  int selectedSquare = 0;
 
+      for(int i = 0; i<4; i++){
+          for(int j = 0; j<numPlayers; j++){
+
+              printf("Player %d please select a square\n", j+1);
+              int selection = scanf("%d", &selectedSquare);
+
+              while(selection == ((board[selectedSquare][0].numTokens > minNumOfTokens) || (board[selectedSquare][0].stack->col == players[j].col))){
+                  printf("Invalid square to place token. Please choose again.");
+                  selection = scanf("%d", &selectedSquare);
+              }
+
+              board[selectedSquare][0].stack = (token *)malloc(sizeof(token));
+              board[selectedSquare][0].stack->col = players[j].col;
+              board[selectedSquare][0].numTokens++;
+
+
+              if(((numPlayers*i)+j+1)%NUM_ROWS==0){
+                  minNumOfTokens++;
+              }
+
+          }
+
+      }
 }
 
 
 /*
  * Place tokens in the first column of the board
- * 
+ *
  * Input: board - a 6x9 array of squares that represents the board
  *        players - the array of the players
- *        numPlayers - the number of players  
+ *        numPlayers - the number of players
  */
 
 void play_game(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPlayers){
-    //TO BE IMPLEMENTED
-}
+  //TO BE IMPLEMENTED
+     srand(time(NULL));
+     int row, move, n;
+     int dice =0;
+     int j=0;
+     while (players[0].numTokensLastCol !=3 || players[1].numTokensLastCol !=3 || players[2].numTokensLastCol !=3|| players[3].numTokensLastCol !=3 || players[4].numTokensLastCol !=3||
+             players[5].numTokensLastCol !=3)
+     {
+         for(int i=0;i<numPlayers;i++)
+         {
+             dice = 1+(rand()%6);
+             printf("Player %d. Your dice roll is : %d\n\n", i+1, dice);
+             printf("Select the row you wish to move the token up/down. Or enter -1 to skip this");
+             scanf("%d", &row);
+             if (row == -1)
+             {
+                 continue;
+             }
+             else
+             {
+                 printf("\nPress 0 to move down, 1 to move up a row.");
+                 scanf("%d", &move);
+                 if (move == 0)
+                 {
+                     n = row+1;
+                     board[n][0] = board[row][0];
+                 }
+                 else if(move == 1)
+                 {
+                     n= n-1;
+                     board[n][0] = board[row][0];
+                 }
 
+                 if ( board[n][0].stack->col == players[i].col )
+                 {
+                     board[n][1] = board[n][0];
+                 }
 
+             }
 
+         }
+
+     }
+     }
