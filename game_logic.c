@@ -7,6 +7,8 @@
 
 #include "game_init.h"
 #include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
 
 void printLine();
 
@@ -90,7 +92,52 @@ void place_tokens(square board[NUM_ROWS][NUM_COLUMNS], player players[], int num
 
 void play_game(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPlayers){
     //TO BE IMPLEMENTED
+    srand(time(NULL));
+    int row, move, n;
+    int dice =0;
+    int j=0;
+    while (players[0].numTokensLastCol !=3 || players[1].numTokensLastCol !=3 || players[2].numTokensLastCol !=3|| players[3].numTokensLastCol !=3 || players[4].numTokensLastCol !=3||
+            players[5].numTokensLastCol !=3)
+    {
+        for(int i=0;i<numPlayers;i++)
+        {
+            dice = 1+(rand()%6);
+            printf("Player %d. Your dice roll is : %d\n\n", i+1, dice);
+            printf("Select the row you wish to move the token up/down. Or enter -1 to skip this");
+            scanf("%d", &row);
+            if (row == -1)
+            {
+                continue;
+            }
+            else 
+            {
+                printf("\nPress 0 to move down, 1 to move up a row.");
+                scanf("%d", &move);
+                if (move == 0)
+                {
+                    n = row+1;
+                    board[n][0] = board[row][0];
+                }
+                else if(move == 1)
+                {
+                    n= n-1;
+                    board[n][0] = board[row][0];
+                }
+                
+                if ( board[n][0].stack->col == players[i].col )
+                {
+                    board[n][1] = board[n][0];
+                }
+                
+            }
+            
+        }
+        
+    }
+    
 }
+
+
 
 
 
