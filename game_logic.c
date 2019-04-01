@@ -7,6 +7,8 @@
 
 #include "game_init.h"
 #include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
 
 void printLine();
 
