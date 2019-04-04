@@ -80,29 +80,40 @@ void place_tokens(square board[NUM_ROWS][NUM_COLUMNS], player players[], int num
   int minNumOfTokens = 0;
   int selectedSquare = 0;
 
-      for(int i = 0; i<4; i++){
-          for(int j = 0; j<numPlayers; j++){
+  for(int i = 0; i<4; i++){
+      for(int j = 0; j<numPlayers; j++){
 
-              printf("Player %d please select a square\n", j+1);
-              int selection = scanf("%d", &selectedSquare);
+          printf("Player %d please select a square\n", j+1);
+          scanf("%d", &selectedSquare);
 
-              while(selection == ((board[selectedSquare][0].numTokens > minNumOfTokens) || (board[selectedSquare][0].stack->col == players[j].col))){
-                  printf("Invalid square to place token. Please choose again.");
-                  selection = scanf("%d", &selectedSquare);
-              }
-
+          if(board[selectedSquare][0].numTokens == minNumOfTokens && board[selectedSquare][0].stack->col != players[j].col){
               board[selectedSquare][0].stack = (token *)malloc(sizeof(token));
-              board[selectedSquare][0].stack->col = players[j].col;
+              board[selectedSquare][0].stack->last->col = players[j].col;
               board[selectedSquare][0].numTokens++;
+              board[selectedSquare][0].stack->next = NULL;
 
-
-              if(((numPlayers*i)+j+1)%NUM_ROWS==0){
-                  minNumOfTokens++;
+              if(board[selectedSquare][0].numTokens == 0){
+                  board[selectedSquare][0].stack->first->col = board[selectedSquare][0].stack->last->col;
               }
+              else{
+                  board[selectedSquare][0].stack->curr->next = board[selectedSquare][0].stack->last;
+              }
+
+              board[selectedSquare][0].stack->curr = board[selectedSquare][0].stack->last;
+
 
           }
 
+
+          if(((numPlayers*i)+j+1)%NUM_ROWS==0){
+              minNumOfTokens++;
+          }
+
       }
+
+  }
+
+
 }
 
 
