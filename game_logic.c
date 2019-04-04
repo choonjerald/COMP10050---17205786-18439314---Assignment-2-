@@ -87,11 +87,22 @@ void place_tokens(square board[NUM_ROWS][NUM_COLUMNS], player players[], int num
           scanf("%d", &selectedSquare);
 
           if(board[selectedSquare][0].numTokens == minNumOfTokens && board[selectedSquare][0].stack->col != players[j].col){
-              board[selectedSquare][0].stack = (token *)malloc(sizeof(token));
-              board[selectedSquare][0].stack->last->col = players[j].col;
-              board[selectedSquare][0].numTokens++;
-              board[selectedSquare][0].stack->next = NULL;
+              if(board[selectedSquare][0].numTokens == 0){
+                  board[selectedSquare][0].stack->top = NULL;
+                  board[selectedSquare][0].stack->curr = NULL;
+              }
 
+              board[selectedSquare][0].stack->curr = board[selectedSquare][0].stack->top;
+              board[selectedSquare][0].stack->top = (token *)malloc(sizeof(token));
+              board[selectedSquare][0].stack->top->col = players[j].col;
+              board[selectedSquare][0].stack->top->next = board[selectedSquare][0].stack->curr;
+
+              // for FIFO queue
+              /*
+              board[selectedSquare][0].stack->last = (token *)malloc(sizeof(token));
+              board[selectedSquare][0].stack->last->col = players[j].col;
+              board[selectedSquare][0].stack->last->next = NULL;
+               *
               if(board[selectedSquare][0].numTokens == 0){
                   board[selectedSquare][0].stack->first->col = board[selectedSquare][0].stack->last->col;
               }
@@ -100,7 +111,8 @@ void place_tokens(square board[NUM_ROWS][NUM_COLUMNS], player players[], int num
               }
 
               board[selectedSquare][0].stack->curr = board[selectedSquare][0].stack->last;
-
+               */
+              board[selectedSquare][0].numTokens++;
 
           }
 
