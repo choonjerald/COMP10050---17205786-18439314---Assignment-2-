@@ -29,13 +29,13 @@ enum color {
 //defines a token.
 //Note each token can be associated with a color
 typedef struct token{
-  enum color col;
-  struct token* next;
-  struct token* curr;
-  // for FIFO queue
-  //struct token* first;
-  //struct token* last;
-  struct token* top;
+   enum color col;
+   struct token* next;
+   //struct token* curr;
+   // for FIFO queue
+   //struct token* first;
+   //struct token* last;
+   //struct token* top;
 }token;
 
 //Defines a square of the board.

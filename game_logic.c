@@ -76,57 +76,86 @@ void printLine(){
  *        players - the array of the players
  *        numPlayers - the number of players
  */
-void place_tokens(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPlayers){
-  int minNumOfTokens = 0;
-  int selectedSquare = 0;
+ void place_tokens(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPlayers){
+     int minNumOfTokens = 0;
+     int selectedSquare = 0;
 
-  for(int i = 0; i<4; i++){
-      for(int j = 0; j<numPlayers; j++){
+     token* current = NULL;
+     token* top = NULL;
+     for(int i = 0; i<4; i++){
+         for(int j = 0; j<numPlayers; j++){
 
-          printf("Player %d please select a square\n", j+1);
-          scanf("%d", &selectedSquare);
+             printf("Player %d please select a square\n", j+1);
+             while(scanf("%d", &selectedSquare) != board[selectedSquare][0].numTokens == minNumOfTokens && board[selectedSquare][0].stack->col != players[j].col){
+                 printf("Invalid square. Please select square again.\n");
 
-          if(board[selectedSquare][0].numTokens == minNumOfTokens && board[selectedSquare][0].stack->col != players[j].col){
-              if(board[selectedSquare][0].numTokens == 0){
-                  board[selectedSquare][0].stack->top = NULL;
-                  board[selectedSquare][0].stack->curr = NULL;
-              }
+             }
 
-              board[selectedSquare][0].stack->curr = board[selectedSquare][0].stack->top;
-              board[selectedSquare][0].stack->top = (token *)malloc(sizeof(token));
-              board[selectedSquare][0].stack->top->col = players[j].col;
-              board[selectedSquare][0].stack->top->next = board[selectedSquare][0].stack->curr;
+             printf("here4\n");
+             if(board[selectedSquare][0].numTokens == 0){
 
-              // for FIFO queue
-              /*
-              board[selectedSquare][0].stack->last = (token *)malloc(sizeof(token));
-              board[selectedSquare][0].stack->last->col = players[j].col;
-              board[selectedSquare][0].stack->last->next = NULL;
-               *
-              if(board[selectedSquare][0].numTokens == 0){
-                  board[selectedSquare][0].stack->first->col = board[selectedSquare][0].stack->last->col;
-              }
-              else{
-                  board[selectedSquare][0].stack->curr->next = board[selectedSquare][0].stack->last;
-              }
+                 printf("here\n");
 
-              board[selectedSquare][0].stack->curr = board[selectedSquare][0].stack->last;
-               */
-              board[selectedSquare][0].numTokens++;
+                 current = (token *)malloc(sizeof(token));
+                 board[selectedSquare][0].stack = current;
+                 board[selectedSquare][0].stack->col = players[j].col;
+                 board[selectedSquare][0].stack->next = NULL;
+                 top = board[selectedSquare][0].stack;
 
-          }
+             }
+
+             if(board[selectedSquare][0].numTokens == minNumOfTokens && board[selectedSquare][0].stack->col != players[j].col){
+
+                 printf("here2\n");
+                 current = (token *)malloc(sizeof(token));
+                 current->col = players[j].col;
+                 current->next = top;
+                 top = current;
+
+             }
+             
+                 /*
+                 if(board[selectedSquare][0].numTokens == 0){
+                     board[selectedSquare][0].stack->top = NULL;
+                     board[selectedSquare][0].stack->curr = NULL;
+                 }
+
+                 board[selectedSquare][0].stack->curr = board[selectedSquare][0].stack->top;
+                 board[selectedSquare][0].stack->top = (token *)malloc(sizeof(token));
+                 board[selectedSquare][0].stack->top->col = players[j].col;
+                 board[selectedSquare][0].stack->top->next = board[selectedSquare][0].stack->curr;
+                 */
+                 // for FIFO queue
+                 /*
+                 board[selectedSquare][0].stack->last = (token *)malloc(sizeof(token));
+                 board[selectedSquare][0].stack->last->col = players[j].col;
+                 board[selectedSquare][0].stack->last->next = NULL;
+                  *
+                 if(board[selectedSquare][0].numTokens == 0){
+                     board[selectedSquare][0].stack->first->col = board[selectedSquare][0].stack->last->col;
+                 }
+                 else{
+                     board[selectedSquare][0].stack->curr->next = board[selectedSquare][0].stack->last;
+                 }
+
+                 board[selectedSquare][0].stack->curr = board[selectedSquare][0].stack->last;
+                  */
+                 board[selectedSquare][0].numTokens++;
 
 
-          if(((numPlayers*i)+j+1)%NUM_ROWS==0){
-              minNumOfTokens++;
-          }
-
-      }
-
-  }
+             printf("here5\n");
 
 
-}
+             if(((numPlayers*i)+j+1)%NUM_ROWS==0){
+                 minNumOfTokens++;
+             }
+
+         }
+
+     }
+
+
+ }
 
 
 /*
