@@ -177,59 +177,101 @@ void place_tokens(square board[NUM_ROWS][NUM_COLUMNS], player players[], int num
  *        numPlayers - the number of players
  */
 
-void play_game(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPlayers){
-  //TO BE IMPLEMENTED
-     srand(time(NULL));
+ void play_game(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPlayers){
+   //TO BE IMPLEMENTED
+      srand(time(NULL));
 
-     for(int i = 0; i< NUM_ROWS; i++){
-         token *curr = board[i][0].stack;
+      for(int i = 0; i< NUM_ROWS; i++){
+          token *curr = board[i][0].stack;
 
-        while(curr != NULL){
-            printf("Token color col %d is %c\n", i, print_token(curr));
-            curr = curr->next;
-        }
-
-     }
-
-     int row, move, n;
-     int dice =0;
-     int j=0;
-     while (players[0].numTokensLastCol !=3 || players[1].numTokensLastCol !=3 || players[2].numTokensLastCol !=3|| players[3].numTokensLastCol !=3 || players[4].numTokensLastCol !=3||
-             players[5].numTokensLastCol !=3)
-     {
-         for(int i=0;i<numPlayers;i++)
-         {
-             dice = 1+(rand()%6);
-             printf("Player %d. Your dice roll is : %d\n\n", i+1, dice);
-             printf("Select the row you wish to move the token up/down. Or enter -1 to skip this");
-             scanf("%d", &row);
-             if (row == -1)
-             {
-                 continue;
-             }
-             else
-             {
-                 printf("\nPress 0 to move down, 1 to move up a row.");
-                 scanf("%d", &move);
-                 if (move == 0)
-                 {
-                     n = row+1;
-                     board[n][0] = board[row][0];
-                 }
-                 else if(move == 1)
-                 {
-                     n= n-1;
-                     board[n][0] = board[row][0];
-                 }
-
-                 if ( board[n][0].stack->col == players[i].col )
-                 {
-                     board[n][1] = board[n][0];
-                 }
-
-             }
-
+         while(curr != NULL){
+             printf("Token color col %d is %c\n", i, print_token(curr));
+             curr = curr->next;
          }
 
-     }
-     }
+      }
+
+      int sidestepmove, n;
+      int dice = 0;
+      int selectrow, selectcol;
+      int sidestep;
+
+      token* moving;
+
+      while (players[0].numTokensLastCol !=3 || players[1].numTokensLastCol !=3 || players[2].numTokensLastCol !=3|| players[3].numTokensLastCol !=3 || players[4].numTokensLastCol !=3||
+              players[5].numTokensLastCol !=3)
+      {
+          for(int i=0;i<numPlayers;i++)
+          {
+              dice = 1+(rand()%6);
+              printf("Player %d. Your dice roll is : %d\n\n", i+1, dice);
+
+              printf("Do you want to do a sidestep? Enter 1 if you want to do a sidestep. Enter 2 to skip this.\n");
+              scanf("%d", &sidestep);
+
+              if(sidestep == 1){
+
+                  printf("Select your token you wish to move the up/down.\n");
+                  printf("Row: ");
+                  scanf("%d", &selectrow);
+                  printf("Column: ");
+                  scanf("%d", &selectcol);
+
+                  while(board[selectrow][selectcol].stack->col != players[i].col){
+                      printf("This is not your token. Please select again.\n");
+                      printf("Row: ");
+                      scanf("%d", &selectrow);
+                      printf("Column: ");
+                      scanf("%d", &selectcol);
+                  }
+
+
+                  printf("Token at board[%d][%d] selected. Press 0 to move down, 1 to move up a row.\n", selectrow, selectcol);
+                  scanf("%d", &sidestepmove);
+
+                  if(sidestepmove == 0){
+
+                  }
+
+                  else if(sidestepmove == 1){
+
+                  }
+
+
+              }
+
+              else if(sidestep == 2){
+                  continue;
+              }
+
+
+          }
+      }
+ }
+
+
+
+             /*
+              if (row == -1)
+              {
+                   printf("\nPress 0 to move down, 1 to move up a row.");
+                  scanf("%d", &move);
+                  if (move == 0)
+                  {
+                      n = row+1;
+                      board[n][0] = board[row][0];
+                  }
+                  else if(move == 1)
+                  {
+                      n= n-1;
+                      board[n][0] = board[row][0];
+                  }
+
+                  if ( board[n][0].stack->col == players[i].col )
+                  {
+                      board[n][1] = board[n][0];
+                  }
+
+              }
+
+              */
