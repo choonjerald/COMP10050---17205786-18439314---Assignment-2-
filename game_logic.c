@@ -246,18 +246,28 @@ void play_game(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPla
 
              printf("Dice roll requires you to move a piece from row %d.\n", dice);
 
+             int j = 0;
              for(int x = 0; x < 9; x++){
                  if(board[dice-1][x].stack->col != players[i].col){
-                     printf("None of your pieces are present in this row. Select a different token in this row token to move.\n");
-                     scanf("%d", &selectcol);
+                     j = 0;
                  }
-
                  else{
-                     printf("Please select your own token in this row to move.\n");
+                     j = 1;
+                 }
+             }
+
+             if(j = 0){
+                 printf("None of your pieces are present in this row. Select a different token in this row token to move.\n");
+                 scanf("%d", &selectcol);
+             }
+
+             else if(j = 1){
+                 printf("Please select your own token in this row to move.\n");
+                 scanf("%d", &selectcol);
+                 while(board[dice-1][selectcol].stack->col != players[i].col){
+                     printf("Invalid token. This is not your token. Please choose again.\n");
                      scanf("%d", &selectcol);
                  }
-
-
              }
 
              if(board[dice-1][selectcol].type == OBSTACLE){
