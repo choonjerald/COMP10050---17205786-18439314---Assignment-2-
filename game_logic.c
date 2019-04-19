@@ -191,25 +191,26 @@ void play_game(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPla
 
      }
 
-     int sidestepmove, n;
+     //int n;
      int dice = 0;
      int selectrow, selectcol;
      int sidestep;
 
      token* moving;
 
-     while (players[0].numTokensLastCol !=3 || players[1].numTokensLastCol !=3 || players[2].numTokensLastCol !=3|| players[3].numTokensLastCol !=3 || players[4].numTokensLastCol !=3||
+     while (players[0].numTokensLastCol !=3 && players[1].numTokensLastCol !=3 && players[2].numTokensLastCol !=3 && players[3].numTokensLastCol !=3 && players[4].numTokensLastCol !=3&&
              players[5].numTokensLastCol !=3)
      {
          for(int i=0;i<numPlayers;i++)
          {
-             dice = 1+(rand()%6);
+             dice = (rand()%6);
              printf("Player %d. Your dice roll is : %d\n\n", i+1, dice);
-
+             
+             int sidestepmove=0;
              printf("Do you want to do a sidestep? Enter 1 if you want to do a sidestep. Enter 2 to skip this.\n");
              scanf("%d", &sidestep);
 
-             if(sidestep == 1){
+             if(sidestep == 1){     //ask user to perform side step
 
                  printf("Select your token you wish to move the up/down.\n");
                  printf("Row: ");
@@ -217,23 +218,36 @@ void play_game(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPla
                  printf("Column: ");
                  scanf("%d", &selectcol);
 
-                 while(board[selectrow][selectcol].stack->col != players[i].col){
+                 while(board[selectrow][selectcol].stack->col != players[i].col){   //if selected stack doesnt have player's token on top, ask to input again
                      printf("This is not your token. Please select again.\n");
                      printf("Row: ");
                      scanf("%d", &selectrow);
                      printf("Column: ");
                      scanf("%d", &selectcol);
+                     printf("token on this row is %c\n" ,print_token(board[selectrow][selectcol].stack));
+                     printf("player token is %c\n" ,players[i].col);
                  }
 
 
                  printf("Token at board[%d][%d] selected. Press 1 to move down, 2 to move up a row.\n", selectrow, selectcol);
                  scanf("%d", &sidestepmove);
+                 printf("sidestepmove is : %d \n", sidestepmove);
 
                  if(sidestepmove == 1){
                      //movement implementation
+                     moving = board[selectrow][selectcol].stack;
+                     board[selectrow][selectcol].stack = moving->next;
+                     moving->next = board[selectrow+1][selectcol].stack;
+                     board[selectrow+1][selectcol].stack = moving;
+                     print_board(board);
                  }
 
                  else if(sidestepmove == 2){
+                     moving = board[selectrow][selectcol].stack;
+                     board[selectrow][selectcol].stack = moving->next;
+                     moving->next = board[selectrow+1][selectcol].stack;
+                     board[selectrow-1][selectcol].stack = moving;
+                     print_board(board);
                      //movement implementation
                  }
 
@@ -241,26 +255,45 @@ void play_game(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPla
              }
 
              else if(sidestep == 2){
+                 print_board(board);
                  continue;
              }
 
              printf("Dice roll requires you to move a piece from row %d.\n", dice);
-
-             for(int x = 0; x < 9; x++){
-                 if(board[dice-1][x].stack->col != players[i].col){
-                     printf("None of your pieces are present in this row. Select a different token in this row token to move.\n");
-                     scanf("%d", &selectcol);
+             
+             int found =0;
+             
+            for(int x = 0; x < 9 && !found; x++){
+                
+                 if(board[dice][x].stack->col != players[i].col){     // case where player have his colour token on this row
+                     found = 0;
+                 } 
+                 
+                 else
+                 {
+                     found = 1;
                  }
-
-                 else{
-                     printf("Please select your own token in this row to move.\n");
-                     scanf("%d", &selectcol);
-                 }
-
 
              }
+             
+             if(found = 0){
+                 printf("None of your pieces are present in this row. Select a different token in this row token to move.\n"); 
+                 scanf("%d", &selectcol);
+             }
+             
+             else if(found = 1){
+                 printf("Please select your own token in this row to move.\n");
+                 scanf("%d", &selectcol);
+                 while(board[dice][selectcol].stack->col != players[i].col){
+                     printf("Invalid token. This is not your token. Please choose again.\n");
+                     scanf("%d", &selectcol);
+                 }
+             }
+             
+             
 
-             if(board[dice-1][selectcol].type == OBSTACLE){
+                //if selected token was in an obsticle, must check all spaces before this token, if theres no tokens before obsticle token, it can be moved
+             if(board[dice][selectcol].type == OBSTACLE){     
                  printf("Token selected is in an obstacle. Checking if move is valid...");
                  for(int x = 0; x < 6; x++){
                      for(int y = 0; y < selectcol; y++){
