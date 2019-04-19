@@ -259,6 +259,7 @@ void play_game(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPla
              printf("Dice roll requires you to move a piece from row %d.\n", dice);
              printf("If no tokens are in this row, enter 1. Else, enter 2.\n");
              int selection;
+             scanf("%d", &selection);
 
              if(selection = 2){
                  printf("Select a token in this row token to move.\n");
