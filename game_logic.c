@@ -105,6 +105,12 @@ void place_tokens(square board[NUM_ROWS][NUM_COLUMNS], player players[], int num
 
                 }
                 else{
+                    while (board[selectedSquare][0].stack->col == players[j].col)
+                    {
+                        printf("Cannot place token on your own colour, choose a different row: \n");
+                        scanf("%d", &selectedSquare);
+                    }
+                    
                     current = (token *)malloc(sizeof(token));
                     current->col = players[j].col;
                     current->next = board[selectedSquare][0].stack;
@@ -182,7 +188,7 @@ void play_game(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPla
                  printf("Column: ");
                  scanf("%d", &selectcol);
 
-                 while(board[selectrow][selectcol].stack == NULL){
+                 while(board[selectrow][selectcol].stack == NULL){      // if selected square is empty
                      printf("There are no tokens in this square. Please select again.\n");
                      printf("Row: ");
                      scanf("%d", &selectrow);
@@ -203,7 +209,7 @@ void play_game(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPla
 
                  int found = 0;
 
-                 while(board[selectrow][selectcol].type == OBSTACLE){
+                 while(board[selectrow][selectcol].type == OBSTACLE){   //if every space before the obsticle is empty
                      for(int n = 0; n < 6; n++){
                          for(int k = 0; k < selectcol; k++){
                              if(board[n][k].stack != NULL){
@@ -211,11 +217,11 @@ void play_game(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPla
                              }
                          }
                      }
-                     if(found = 0){
+                     if(found == 0){
                          board[selectrow][selectcol].type = NORMAL;
                      }
 
-                     else if(found = 1){
+                     else if(found == 1){
                          board[selectrow][selectcol].type = OBSTACLE;
                          printf("Token in obstacle. Please select again.\n");
                          printf("Row: ");
@@ -257,12 +263,20 @@ void play_game(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPla
              }
 
              printf("Dice roll requires you to move a piece from row %d.\n", dice);
-             printf("If no tokens are in this row, enter 1. Else, enter 2.\n");
-             int selection;
-             scanf("%d", &selection);
+            // printf("If there are tokens in this row, enter 1. Else, enter 2.\n");
+             //int selection;
+             //scanf("%d", &selection);
+             int emptycheck =1;
+             for(int z=0;z<8;z++)
+             {
+                 if (board[dice][z].stack != NULL)
+                 {
+                     emptycheck = 0;
+                 }
+             }
 
-             if(selection = 2){
-                 printf("Select a token in this row token to move.\n");
+             if(emptycheck == 0){
+                 printf("Select the column of a token in this row to move.\n");
                  scanf("%d", &selectcol);
 
                  while(board[dice][selectcol].stack == NULL){
@@ -281,11 +295,11 @@ void play_game(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPla
                          }
 
                      }
-                     if(found = 0){
+                     if(found == 0){
                          board[selectrow][selectcol].type = NORMAL;
                      }
 
-                     else if(found = 1){
+                     else if(found == 1){
                          board[selectrow][selectcol].type = OBSTACLE;
                          printf("Token in obstacle. Please select again.\n");
                          printf("Column: ");
@@ -306,7 +320,7 @@ void play_game(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPla
 
              }
 
-             else if(selection = 1){
+             else if(emptycheck == 1){
                  printf("Select any free token to move\n");
                  printf("Row: \n");
                  scanf("%d", &selectrow);
@@ -322,11 +336,11 @@ void play_game(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPla
                              }
                          }
                      }
-                     if(found = 0){
+                     if(found == 0){
                          board[selectrow][selectcol].type = NORMAL;
                      }
 
-                     else if(found = 1){
+                     else if(found == 1){
                          board[selectrow][selectcol].type = OBSTACLE;
                          printf("Token in obstacle. Please select again.\n");
                          printf("Row: ");
