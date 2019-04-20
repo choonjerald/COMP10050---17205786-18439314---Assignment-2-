@@ -110,7 +110,7 @@ void place_tokens(square board[NUM_ROWS][NUM_COLUMNS], player players[], int num
                         printf("Cannot place token on your own colour, choose a different row: \n");
                         scanf("%d", &selectedSquare);
                     }
-                    
+
                     current = (token *)malloc(sizeof(token));
                     current->col = players[j].col;
                     current->next = board[selectedSquare][0].stack;
@@ -166,8 +166,8 @@ void play_game(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPla
      int sidestep;
      int winner;
 
-     token* moving;
-
+     token* sidemoving;
+     token* forwardmoving;
      while (players[0].numTokensLastCol !=3 && players[1].numTokensLastCol !=3 && players[2].numTokensLastCol !=3 && players[3].numTokensLastCol !=3 && players[4].numTokensLastCol !=3&&
              players[5].numTokensLastCol !=3)
      {
@@ -237,20 +237,20 @@ void play_game(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPla
 
                  if(sidestepmove == 1){
                      //movement implementation
-                     moving = board[selectrow][selectcol].stack;
-                     board[selectrow][selectcol].stack = moving->next;
-                     moving->next = board[selectrow+1][selectcol].stack;
-                     board[selectrow+1][selectcol].stack = moving;
+                     sidemoving = board[selectrow][selectcol].stack;
+                     board[selectrow][selectcol].stack = sidemoving->next;
+                     sidemoving->next = board[selectrow+1][selectcol].stack;
+                     board[selectrow+1][selectcol].stack = sidemoving;
                      print_board(board);
 
                  }
 
                  else if(sidestepmove == 2){
                      //movement implementation
-                     moving = board[selectrow][selectcol].stack;
-                     board[selectrow][selectcol].stack = moving->next;
-                     moving->next = board[selectrow+1][selectcol].stack;
-                     board[selectrow-1][selectcol].stack = moving;
+                     sidemoving = board[selectrow][selectcol].stack;
+                     board[selectrow][selectcol].stack = sidemoving->next;
+                     sidemoving->next = board[selectrow+1][selectcol].stack;
+                     board[selectrow-1][selectcol].stack = sidemoving;
                      print_board(board);
 
                  }
@@ -307,10 +307,10 @@ void play_game(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPla
                      }
                  }
 
-                 moving = board[dice][selectcol].stack;
-                 board[dice][selectcol].stack = moving->next;
-                 moving->next = board[dice][selectcol + 1].stack;
-                 board[dice][selectcol + 1].stack = moving;
+                 forwardmoving = board[dice][selectcol].stack;
+                 board[dice][selectcol].stack = forwardmoving->next;
+                 forwardmoving->next = board[dice][selectcol + 1].stack;
+                 board[dice][selectcol + 1].stack = forwardmoving;
                  print_board(board);
 
                  if((selectcol + 1) == 8){
@@ -349,10 +349,10 @@ void play_game(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPla
                          scanf("%d", &selectcol);
                      }
                  }
-                 moving = board[selectrow][selectcol].stack;
-                 board[selectrow][selectcol].stack = moving->next;
-                 moving->next = board[selectrow][selectcol + 1].stack;
-                 board[selectrow][selectcol + 1].stack = moving;
+                 forwardmoving = board[selectrow][selectcol].stack;
+                 board[selectrow][selectcol].stack = forwardmoving->next;
+                 forwardmoving->next = board[selectrow][selectcol + 1].stack;
+                 board[selectrow][selectcol + 1].stack = forwardmoving;
                  print_board(board);
 
                  if((selectcol + 1) == 8){
