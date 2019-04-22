@@ -173,7 +173,7 @@ void play_game(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPla
      {
          for(int i=0;i<numPlayers;i++)
          {
-             dice = (rand()%6);
+             dice = (rand()%6);     // generates number between 0 to 5 representing the rows (instead of your ordinary dice from 1-6)
              printf("Player %d. Your dice roll is : %d\n\n", i+1, dice);
 
              int sidestepmove=0;
@@ -188,7 +188,7 @@ void play_game(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPla
                  printf("Column: ");
                  scanf("%d", &selectcol);
 
-                 while(board[selectrow][selectcol].stack == NULL){      // if selected square is empty
+                 while(board[selectrow][selectcol].stack == NULL){      // if the selected square is empty, asks to re-entre
                      printf("There are no tokens in this square. Please select again.\n");
                      printf("Row: ");
                      scanf("%d", &selectrow);
@@ -207,11 +207,11 @@ void play_game(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPla
 
                  int found = 0;
 
-                 while(board[selectrow][selectcol].type == OBSTACLE){   //if every space before the obsticle is empty
+                 while(board[selectrow][selectcol].type == OBSTACLE){   //if chosen token is an obsticle
                      for(int n = 0; n < 6; n++){
                          for(int k = 0; k < selectcol; k++){
                              if(board[n][k].stack != NULL){
-                                 found = 1; // check if there are any empty squares if there is an occupied square found is set to 1
+                                 found = 1; // check if there are any empty squares before the obstacle token if there is an occupied square found is set to 1
                              }
                          }
                      }
@@ -235,19 +235,18 @@ void play_game(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPla
 
                  if(sidestepmove == 1){
                      //movement implementation
-                     sidemoving = board[selectrow][selectcol].stack;
-                     board[selectrow][selectcol].stack = sidemoving->next;
-                     sidemoving->next = board[selectrow+1][selectcol].stack;
-                     board[selectrow+1][selectcol].stack = sidemoving;
+                     sidemoving = board[selectrow][selectcol].stack;      //sidemoving points to top of selected stack
+                     board[selectrow][selectcol].stack = sidemoving->next; // top of selected stack now points to sidemoving->next, which is the second token from the old stack, making token after top the new top of stack
+                     sidemoving->next = board[selectrow+1][selectcol].stack;    // sidemoving->next points to top of the stack we want to move the token to
+                     board[selectrow+1][selectcol].stack = sidemoving;  // let top of new stack point to the token where sidemoving was pointing to                     print_board(board);
                      print_board(board);
-
                  }
 
-                 else if(sidestepmove == 2){
+                 else if(sidestepmove == 2){        //moving mechanism same as above
                      //movement implementation
                      sidemoving = board[selectrow][selectcol].stack;
                      board[selectrow][selectcol].stack = sidemoving->next;
-                     sidemoving->next = board[selectrow+1][selectcol].stack;
+                     sidemoving->next = board[selectrow-1][selectcol].stack;    //except now its [selectrow - 1] as we are moving up a row in this condition
                      board[selectrow-1][selectcol].stack = sidemoving;
                      print_board(board);
 
@@ -264,17 +263,17 @@ void play_game(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPla
              int emptycheck =1;
              for(int z=0;z<8;z++) // check if there are any tokens in this row
              {
-                 if (board[dice][z].stack != NULL)
+                 if (board[dice][z].stack != NULL)  // if there's at least one token in this row emptycheck = 0
                  {
                      emptycheck = 0;
                  }
              }
 
-             if(emptycheck == 0){ // if tokens available in this row, allow user to move
+             if(emptycheck == 0){ // case where there are tokens in this row, allows user to move
                  printf("Select the column of a token in this row to move.\n");
                  scanf("%d", &selectcol);
 
-                 while(board[dice][selectcol].stack == NULL){
+                 while(board[dice][selectcol].stack == NULL){   //if empty token selected, choose again
                      printf("No token in this square. Please select again.\n");
                      scanf("%d", &selectcol);
                  }
@@ -284,34 +283,34 @@ void play_game(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPla
                      int found = 0;
                      for(int n = 0; n < 6; n++){
                          for(int k = 0; k < selectcol; k++){
-                             if(board[n][k].stack != NULL){
-                                found = 1;
+                             if(board[n][k].stack != NULL){     // if all previous spaces before the obsticle selected token are empty
+                                found = 1;                      // it's a valid move
                              }
                          }
 
                      }
-                     if(found == 0){
+                     if(found == 0){        // if valid move, board type becomes normal
                          board[selectrow][selectcol].type = NORMAL;
                      }
 
-                     else if(found == 1){
+                     else if(found == 1){       // if not valid, type stays obstacle and another column must be chosen
                          board[selectrow][selectcol].type = OBSTACLE;
                          printf("Token in obstacle. Please select again.\n");
                          printf("Column: ");
                          scanf("%d", &selectcol);
                      }
                  }
-
+                // movement logic here is pretty much the same as above, except the value of the column changes here
                  forwardmoving = board[dice][selectcol].stack;
                  board[dice][selectcol].stack = forwardmoving->next;
                  forwardmoving->next = board[dice][selectcol + 1].stack;
                  board[dice][selectcol + 1].stack = forwardmoving;
                  print_board(board);
 
-                 if((selectcol + 1) == 8){
-                     players[i].numTokensLastCol += 1; //increment the number of tokens at the last column for a player by one
-                     winner = i; // if the winner gets 3 tokens at the last column this is the winner
-                 }
+                 if((selectcol + 1) == 8){      // if token selected to move forward will reach last column
+                     players[i].numTokensLastCol += 1; //increment the number of tokens at the last column for that player by one
+                     winner = i; // winner will temporarly set to this player
+                 }              // if this was the players 3rd token in the last column, game will stop and this is the winner
 
              }
 
@@ -344,7 +343,7 @@ void play_game(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPla
                          scanf("%d", &selectcol);
                      }
                  }
-                 forwardmoving = board[selectrow][selectcol].stack;
+                 forwardmoving = board[selectrow][selectcol].stack;         //same moving logic as above
                  board[selectrow][selectcol].stack = forwardmoving->next;
                  forwardmoving->next = board[selectrow][selectcol + 1].stack;
                  board[selectrow][selectcol + 1].stack = forwardmoving;
@@ -359,5 +358,5 @@ void play_game(square board[NUM_ROWS][NUM_COLUMNS], player players[], int numPla
          }
      }
 
-     printf("The winner is Player %d!", winner); // prints the winner
+     printf("The winner is Player %d!", winner); // prints the winner as the while loop that checks if anyone has 3 tokens in the last column breaks.
 }
