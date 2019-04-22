@@ -48,7 +48,7 @@ int initialize_players(player players[]){
     printf("Player 1: RED;\nPlayer 2: BLU;\nPlayer 3: GREEN;\nPlayer 4: YELLOW;\nPlayer 5: PINK;\nPlayer 6: ORANGE;\n");
     printf("Enter how many players are playing: ");
     scanf("%d", &j);
-
+    printf("The number of players playing are %d\n", j);
     int i = 0;
     while(i<j){
         printf("Enter Name for Player %d: ", i+1);

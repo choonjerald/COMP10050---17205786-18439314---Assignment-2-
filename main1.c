@@ -13,7 +13,6 @@
 
 #include "game_init.h"
 #include "game_logic.h"
-#include <stdio.h>
 
 /*
  *
@@ -37,7 +36,6 @@ int main(int argc, char** argv) {
 
     //creates the players
     numPlayers = initialize_players(players);
-    printf("The number of players playing are %d", numPlayers);
 
     //asks each player to place their tokens
     //on the first column of the board
